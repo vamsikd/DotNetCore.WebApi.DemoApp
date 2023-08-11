@@ -1,12 +1,18 @@
+using DemoApp.API.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
-
+var connecttionString = builder.Configuration.GetConnectionString("DefaultConnection");
+Console.WriteLine(connecttionString);
 // Add services to the container.
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddDbContext<DemoAppDbContext>(opts =>
+{
+    opts.UseMySql(connecttionString, ServerVersion.AutoDetect(connecttionString));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
