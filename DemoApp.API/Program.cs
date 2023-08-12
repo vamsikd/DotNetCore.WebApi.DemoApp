@@ -1,4 +1,5 @@
 using DemoApp.API.Data;
+using DemoApp.API.Middlewares;
 using DemoApp.API.Services;
 using DemoApp.API.Services.Interfaces;
 using FluentValidation.AspNetCore;
@@ -32,5 +33,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.Run();

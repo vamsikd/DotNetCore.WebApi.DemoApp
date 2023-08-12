@@ -1,5 +1,6 @@
 ﻿using DemoApp.API.Data;
 using DemoApp.API.Dto;
+using DemoApp.API.Exceptions;
 using DemoApp.API.Models;
 using DemoApp.API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -47,12 +48,7 @@ namespace DemoApp.API.Services
 
         public bool Update(UpdateProductRequestDto productDto)
         {
-            var product = _dbContext.Products
-                .Include(p => p.ProductDetail)
-                .FirstOrDefault(p => p.Id == productDto.Id);
-
-            if (product == null)
-                throw new Exception($"Product not found for Id {productDto.Id}");
+            var product = this.GetModel(productDto.Id);
 
             product.Name = productDto.Name;
             product.Description = productDto.Description;
@@ -69,67 +65,68 @@ namespace DemoApp.API.Services
             return true;
         }
 
-        bool IProductService.Delete(int productId)
+        public bool Delete(int productId)
         {
-            var product = _dbContext.Products
-               .Include(p => p.ProductDetail)
-               .FirstOrDefault(p => p.Id == productId);
-
-            if (product == null)
-                throw new Exception($"Product not found for Id {productId}");
+            var product = this.GetModel(productId);
 
             _dbContext.Products.Remove(product);
             _dbContext.SaveChanges();
             return true;
         }
 
-        ProductResponseDto IProductService.Get(int productId)
+        public ProductResponseDto Get(int productId)
         {
-            var product = _dbContext.Products
-                .Include(p => p.ProductDetail)
-                .FirstOrDefault(p => p.Id == productId);
-
-            if (product == null)
-                throw new Exception($"Product not found for Id {productId}");
+            var product = this.GetModel(productId);
 
             var productResponseDto = new ProductResponseDto();
-            {
-                productResponseDto.Id = productId;
-                productResponseDto.Name = product.Name;
-                productResponseDto.Description = product.Description;
-                productResponseDto.Price = product.Price;
-                productResponseDto.AvailableQuantity = product.ProductDetail.AvailableQuantity;
-                productResponseDto.Discount = product.ProductDetail.Discount;
-                productResponseDto.InStock = product.ProductDetail.InStock;
-                productResponseDto.IsActive = product.ProductDetail.IsActive;
-                productResponseDto.CreatedOn = product.CreatedOn;
-                productResponseDto.UpdatedOn = product.UpdatedOn;
+            productResponseDto.Id = productId;
+            productResponseDto.Name = product.Name;
+            productResponseDto.Description = product.Description;
+            productResponseDto.Price = product.Price;
+            productResponseDto.AvailableQuantity = product.ProductDetail.AvailableQuantity;
+            productResponseDto.Discount = product.ProductDetail.Discount;
+            productResponseDto.InStock = product.ProductDetail.InStock;
+            productResponseDto.IsActive = product.ProductDetail.IsActive;
+            productResponseDto.CreatedOn = product.CreatedOn;
+            productResponseDto.UpdatedOn = product.UpdatedOn;
 
-            };
             return productResponseDto;
         }
 
-        List<ProductResponseDto> IProductService.GetAll()
+        public IEnumerable<ProductResponseDto> GetAll()
         {
             var products = _dbContext.Products
                 .Include(p => p.ProductDetail)
                 .ToList();
-            var productResponseDtoList = products.Select(p => new ProductResponseDto
-            {
-                Id = p.Id,
-                Name = p.Name,
-                Description = p.Description,
-                Price = p.Price,
-                AvailableQuantity = p.ProductDetail.AvailableQuantity,
-                Discount = p.ProductDetail.Discount,
-                InStock = p.ProductDetail.InStock,
-                IsActive = p.ProductDetail.IsActive,
-                CreatedOn = p.CreatedOn,
-                UpdatedOn = p.UpdatedOn
+            var productResponseDtoList = products
+                .Select(p => new ProductResponseDto
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                        Price = p.Price,
+                        AvailableQuantity = p.ProductDetail.AvailableQuantity,
+                        Discount = p.ProductDetail.Discount,
+                        InStock = p.ProductDetail.InStock,
+                        IsActive = p.ProductDetail.IsActive,
+                        CreatedOn = p.CreatedOn,
+                        UpdatedOn = p.UpdatedOn
 
-            })
+                    })
                 .ToList();
             return productResponseDtoList;
+        }
+
+        private Product GetModel(int productId)
+        {
+            var product = _dbContext.Products
+               .Include(p => p.ProductDetail)
+               .FirstOrDefault(p => p.Id == productId);
+
+            if (product == null)
+                throw new NotFoundException($"Product not found for Id {productId}");
+
+            return product;
         }
     }
 }
