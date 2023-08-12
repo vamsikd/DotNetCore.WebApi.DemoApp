@@ -2,7 +2,6 @@
 using DemoApp.API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 
 namespace DemoApp.API.Controllers
 {
@@ -16,25 +15,12 @@ namespace DemoApp.API.Controllers
             _productSvc = productService;
         }
 
-        public IProductService ProductService { get; }
-
         [HttpGet]
         public ActionResult<List<ProductResponseDto>> GetAll() 
         {
-            var products = new List<ProductResponseDto>
-            {
-                new ProductResponseDto
-                {
-                   // Id = Guid.NewGuid().ToString(),
-                    Name = "Test",
-                    Description = "Test",
-                    AvailableQuantity = 1,
-                    IsActive = true,
-                    InStock = true
-                }
-            };
+           List<ProductResponseDto> result = _productSvc.GetAll();
 
-            return Ok(products);
+            return Ok(result);
         }
 
         [HttpPost]
@@ -45,5 +31,44 @@ namespace DemoApp.API.Controllers
 
             return Ok(productId);
         }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] UpdateProductRequestDto product)
+        {
+
+            bool Updated = _productSvc.Update(product);
+
+            if(Updated)
+                return Ok($"Successfully Updated {product.Name}");
+            else 
+                return BadRequest();
+            
+        }
+
+        [HttpDelete]
+        [Route("{productId}")]
+        public IActionResult Delete([FromRoute] int productId)
+        {
+
+            bool deleted = _productSvc.Delete(productId);
+
+            if (deleted)
+                return Ok($"Successfully Deleted {productId}");
+            else
+                return BadRequest();
+
+        }
+
+        [HttpGet]
+        [Route("{productId}")]
+        public ActionResult<ProductResponseDto> Get([FromRoute] int productId)
+        {
+
+            ProductResponseDto responseDto = _productSvc.Get(productId);
+
+            return Ok(responseDto);
+
+        }
+
     }
 }

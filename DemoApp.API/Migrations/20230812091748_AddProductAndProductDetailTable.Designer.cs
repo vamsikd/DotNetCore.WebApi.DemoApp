@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApp.API.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20230812063535_ChangedDecimalDataTypeInProctDetailTable")]
-    partial class ChangedDecimalDataTypeInProctDetailTable
+    [Migration("20230812091748_AddProductAndProductDetailTable")]
+    partial class AddProductAndProductDetailTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,8 @@ namespace DemoApp.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .IsUnique();
 
                     b.ToTable("ProductDetails");
                 });
@@ -86,12 +87,18 @@ namespace DemoApp.API.Migrations
             modelBuilder.Entity("DemoApp.API.Models.ProductDetail", b =>
                 {
                     b.HasOne("DemoApp.API.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                        .WithOne("ProductDetail")
+                        .HasForeignKey("DemoApp.API.Models.ProductDetail", "ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DemoApp.API.Models.Product", b =>
+                {
+                    b.Navigation("ProductDetail")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
