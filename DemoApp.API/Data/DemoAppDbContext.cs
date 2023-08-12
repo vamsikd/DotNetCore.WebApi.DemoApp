@@ -11,6 +11,8 @@ namespace DemoApp.API.Data
             
         }
 
-        DbSet<Product> Products { get; set; }
+       public DbSet<Product> Products { get; set; }
+
+       public DbSet<ProductDetail> ProductDetails { get; set; }
     }
 }

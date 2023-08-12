@@ -4,6 +4,6 @@ namespace DemoApp.API.Services.Interfaces
 {
     public interface IProductService
     {
-        string Add(AddProductRequestDto product);
+        int Add(AddProductRequestDto product);
     }
 }

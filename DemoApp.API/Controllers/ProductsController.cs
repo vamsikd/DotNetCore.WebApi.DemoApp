@@ -25,10 +25,10 @@ namespace DemoApp.API.Controllers
             {
                 new ProductResponseDto
                 {
-                    Id = Guid.NewGuid().ToString(),
+                   // Id = Guid.NewGuid().ToString(),
                     Name = "Test",
                     Description = "Test",
-                    Quantity = 1,
+                    AvailableQuantity = 1,
                     IsActive = true,
                     InStock = true
                 }
@@ -43,7 +43,7 @@ namespace DemoApp.API.Controllers
             
             var productId = _productSvc.Add(product);
 
-            return Ok();
+            return Ok(productId);
         }
     }
 }
