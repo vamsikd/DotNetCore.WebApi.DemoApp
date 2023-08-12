@@ -8,7 +8,8 @@ namespace DemoApp.API.Models
         public int AvailableQuantity { get; set; }
         public int Discount { get; set; }
         public bool IsActive { get; set; }
-        public bool InStock { get; set; }
+        [NotMapped]
+        public bool InStock { get { return AvailableQuantity > 0; } }
         [ForeignKey("Product")]
         public int ProductId { get; set; }
         public Product Product { get; set; }

@@ -3,6 +3,7 @@ using System;
 using DemoApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApp.API.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230812175420_AddedCategoryTableWithFK")]
+    partial class AddedCategoryTableWithFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,35 +48,6 @@ namespace DemoApp.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Code = "ELECT",
-                            CreatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1782),
-                            Description = "Electronic products",
-                            Name = "Electronics",
-                            UpdatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1798)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Code = "BEAUT",
-                            CreatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1800),
-                            Description = "Beauty cosmetics",
-                            Name = "Beauty",
-                            UpdatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1800)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Code = "FASHN",
-                            CreatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1801),
-                            Description = "Fashion apperal",
-                            Name = "Fashion",
-                            UpdatedOn = new DateTime(2023, 8, 12, 23, 47, 57, 348, DateTimeKind.Local).AddTicks(1802)
-                        });
                 });
 
             modelBuilder.Entity("DemoApp.API.Models.Product", b =>

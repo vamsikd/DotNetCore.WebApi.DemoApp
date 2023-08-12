@@ -34,7 +34,6 @@ namespace DemoApp.API.Services
             {
                 AvailableQuantity = productDto.AvailableQuantity,
                 Discount = productDto.Discount,
-                InStock = productDto.InStock,
                 IsActive = productDto.IsActive,
                 ProductId = product.Id,
                 CreatedOn = DateTime.Now,
@@ -56,7 +55,6 @@ namespace DemoApp.API.Services
             product.UpdatedOn = DateTime.Now;
             product.ProductDetail.AvailableQuantity = productDto.AvailableQuantity;
             product.ProductDetail.Discount = productDto.Discount;
-            product.ProductDetail.InStock = productDto.InStock;
             product.ProductDetail.IsActive = productDto.IsActive;
             product.ProductDetail.UpdatedOn = DateTime.Now;
 
