@@ -24,6 +24,7 @@ namespace DemoApp.API.Services
                 Name = productDto.Name,
                 Description = productDto.Description,
                 Price = productDto.Price,
+                CategoryId = productDto.CategoryId,
                 CreatedOn = DateTime.Now,
                 UpdatedOn = DateTime.Now
             };
@@ -52,6 +53,7 @@ namespace DemoApp.API.Services
             product.Name = productDto.Name;
             product.Description = productDto.Description;
             product.Price = productDto.Price;
+            product.CategoryId = productDto.CategoryId;
             product.UpdatedOn = DateTime.Now;
             product.ProductDetail.AvailableQuantity = productDto.AvailableQuantity;
             product.ProductDetail.Discount = productDto.Discount;
@@ -81,6 +83,7 @@ namespace DemoApp.API.Services
             productResponseDto.Name = product.Name;
             productResponseDto.Description = product.Description;
             productResponseDto.Price = product.Price;
+            productResponseDto.CategoryId = product.CategoryId;
             productResponseDto.AvailableQuantity = product.ProductDetail.AvailableQuantity;
             productResponseDto.Discount = product.ProductDetail.Discount;
             productResponseDto.InStock = product.ProductDetail.InStock;
@@ -103,6 +106,7 @@ namespace DemoApp.API.Services
                         Name = p.Name,
                         Description = p.Description,
                         Price = p.Price,
+                        CategoryId = p.CategoryId,
                         AvailableQuantity = p.ProductDetail.AvailableQuantity,
                         Discount = p.ProductDetail.Discount,
                         InStock = p.ProductDetail.InStock,
