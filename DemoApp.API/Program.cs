@@ -5,6 +5,7 @@ using DemoApp.API.Services;
 using DemoApp.API.Services.Interfaces;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +16,15 @@ int intervalInMinutes = Convert.ToInt32(builder.Configuration["Scheduler:Interva
 builder.Services.AddControllers().AddFluentValidation(o => o.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly())); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "API for CRUD operations on Products and Categories",
+        Version = "v1",
+        Description = "This project is a Asp.Net Core Web API with MySQL as Database with Entity Framework code first approach"
+    });
+});
 builder.Services.AddDbContext<DemoAppDbContext>(opts =>
 {
     opts.UseMySql(connecttionString, ServerVersion.AutoDetect(connecttionString));
