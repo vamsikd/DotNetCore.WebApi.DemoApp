@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "API for CRUD operations on Products and Categories",
         Version = "v1",
-        Description = "This project is a Asp.Net Core Web API with MySQL as Database with Entity Framework code first approach"
+        Description = "This project is a Asp.Net Core Web API and Entity Framework code first approach with MySQL as Database"
     });
 });
 builder.Services.AddDbContext<DemoAppDbContext>(opts =>

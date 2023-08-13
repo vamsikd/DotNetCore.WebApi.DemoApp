@@ -1,5 +1,5 @@
 # DemoApp
-**This project is a Asp.Net Core Web API with MySQL as Database with Entity Framework code first approach**
+**This project is a Asp.Net Core Web API and Entity Framework code first approach with MySQL as Database**
 
 ## Project Setup
 Please clone the project and install the necessary nuget dependencies 
