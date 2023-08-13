@@ -1,3 +1,4 @@
+using DemoApp.API;
 using DemoApp.API.Data;
 using DemoApp.API.Middlewares;
 using DemoApp.API.Services;
@@ -21,6 +22,8 @@ builder.Services.AddDbContext<DemoAppDbContext>(opts =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IExcelFileProcessor, ExcelFileProcessor>();
+
+builder.Services.AddQuartzScheduler();
 
 var app = builder.Build();
 
