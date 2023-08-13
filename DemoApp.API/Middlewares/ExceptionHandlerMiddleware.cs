@@ -6,12 +6,12 @@ namespace DemoApp.API.Middlewares
     public class ExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        //private readonly ILogger _logger;
+        private readonly ILogger _logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             _next = next;
-            //_logger = logger;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -23,7 +23,7 @@ namespace DemoApp.API.Middlewares
             catch (NotFoundException ex)
             {
                 // log error
-                //_logger.LogError(ex, "Details Not Found");
+                _logger.LogError(ex, "Details Not Found");
                 // send error response
                 var response = context.Response;
                 response.ContentType = "application/json";
@@ -33,7 +33,7 @@ namespace DemoApp.API.Middlewares
             catch (Exception ex)
             {
                 // log error
-                //_logger.LogError(ex, "Internal Server Error");
+                _logger.LogError(ex, "Internal Server Error");
                 // send error response
                 var response = context.Response;
                 response.ContentType = "application/json";
@@ -46,12 +46,4 @@ namespace DemoApp.API.Middlewares
 
     }
 
-    public static class ExceptionHandlerMiddlewareExtensions
-    {
-        public static IApplicationBuilder UseExcetionHandler(
-            this IApplicationBuilder builder)
-        {
-            return builder.UseMiddleware<ExceptionHandlerMiddleware>();
-        }
-    }
 }

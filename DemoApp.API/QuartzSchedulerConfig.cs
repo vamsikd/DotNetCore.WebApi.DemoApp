@@ -5,19 +5,19 @@ namespace DemoApp.API
 {
     public static class QuartzSchedulerConfig
     {
-        public static void AddQuartzScheduler(this IServiceCollection services)
+        public static void AddScheduledJobs(this IServiceCollection services, int intervalInMinutes = 1)
         {
             services.AddQuartz(opts =>
             {
                 opts.UseMicrosoftDependencyInjectionJobFactory();
-                var jobkey = JobKey.Create(nameof(LoggingJob));
+                var jobkey = JobKey.Create(nameof(ArchiveProductsJob));
                 opts
-                    .AddJob<LoggingJob>(jobkey)
+                    .AddJob<ArchiveProductsJob>(jobkey)
                     .AddTrigger(trigger =>
                         trigger
                             .ForJob(jobkey)
                             .WithSimpleSchedule(schedule =>
-                                schedule.WithIntervalInSeconds(10).RepeatForever()));
+                                schedule.WithIntervalInMinutes(intervalInMinutes).RepeatForever()));
             });
             services.AddQuartzHostedService();
         }

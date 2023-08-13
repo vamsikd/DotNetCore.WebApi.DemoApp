@@ -119,6 +119,56 @@ namespace DemoApp.API.Services
             return productResponseDtoList;
         }
 
+        public IEnumerable<ArchivedProductResponseDto> GetArchivedProducts()
+        {
+            var archivedProducts = _dbContext.ArchivedProducts
+                .ToList();
+            var archivedProductResponseDtoList = archivedProducts
+                .Select(p => new ArchivedProductResponseDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId,
+                    CreatedOn = p.CreatedOn,
+                    UpdatedOn = p.UpdatedOn
+
+                })
+                .ToList();
+            return archivedProductResponseDtoList;
+        }
+
+        public int ArchiveInActiveProducts()
+        {
+            var inActiveProducts = _dbContext.ProductDetails
+                .Include(pd => pd.Product)
+                .Where(pd => pd.IsActive == false)
+                .Select(pd => pd.Product)
+                .ToList();
+
+            var archivedProducts = inActiveProducts
+                .Select(p => new ArchivedProduct
+                {
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    CategoryId = p.CategoryId,
+                    UpdatedOn = DateTime.Now,
+                    CreatedOn = DateTime.Now
+
+                });
+            //Remove these Products in Product table
+            if(inActiveProducts is not null)
+            {
+                _dbContext.Products.RemoveRange(inActiveProducts);
+                _dbContext.ArchivedProducts.AddRange(archivedProducts);
+                _dbContext.SaveChanges();
+                return inActiveProducts.Count;
+            }
+            return 0;
+        }
+
         private Product GetModel(int productId)
         {
             var product = _dbContext.Products

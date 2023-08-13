@@ -3,6 +3,7 @@ using System;
 using DemoApp.API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DemoApp.API.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813155901_AddedArchivedProductTable")]
+    partial class AddedArchivedProductTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,10 +44,17 @@ namespace DemoApp.API.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(65,30)");
 
+                    b.Property<int>("ProductDetailId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedOn")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductDetailId");
 
                     b.ToTable("ArchivedProducts");
                 });
@@ -81,28 +91,28 @@ namespace DemoApp.API.Migrations
                         {
                             Id = 1,
                             Code = "ELECT",
-                            CreatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8670),
+                            CreatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9531),
                             Description = "Electronic products",
                             Name = "Electronics",
-                            UpdatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8686)
+                            UpdatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9543)
                         },
                         new
                         {
                             Id = 2,
                             Code = "BEAUT",
-                            CreatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8687),
+                            CreatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9544),
                             Description = "Beauty cosmetics",
                             Name = "Beauty",
-                            UpdatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8688)
+                            UpdatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9544)
                         },
                         new
                         {
                             Id = 3,
                             Code = "FASHN",
-                            CreatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8689),
+                            CreatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9545),
                             Description = "Fashion apperal",
                             Name = "Fashion",
-                            UpdatedOn = new DateTime(2023, 8, 13, 21, 49, 19, 815, DateTimeKind.Local).AddTicks(8689)
+                            UpdatedOn = new DateTime(2023, 8, 13, 21, 29, 0, 909, DateTimeKind.Local).AddTicks(9546)
                         });
                 });
 
@@ -168,6 +178,25 @@ namespace DemoApp.API.Migrations
                         .IsUnique();
 
                     b.ToTable("ProductDetails");
+                });
+
+            modelBuilder.Entity("DemoApp.API.Models.ArchivedProduct", b =>
+                {
+                    b.HasOne("DemoApp.API.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DemoApp.API.Models.ProductDetail", "ProductDetail")
+                        .WithMany()
+                        .HasForeignKey("ProductDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("ProductDetail");
                 });
 
             modelBuilder.Entity("DemoApp.API.Models.Product", b =>

@@ -15,6 +15,7 @@ namespace DemoApp.API.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductDetail> ProductDetails { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ArchivedProduct> ArchivedProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

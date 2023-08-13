@@ -9,8 +9,9 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 var connecttionString = builder.Configuration.GetConnectionString("DefaultConnection");
-Console.WriteLine(connecttionString);
+int intervalInMinutes = Convert.ToInt32(builder.Configuration["Scheduler:IntervalInMinutes"]);
 // Add services to the container.
+
 builder.Services.AddControllers().AddFluentValidation(o => o.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly())); 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -23,7 +24,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IExcelFileProcessor, ExcelFileProcessor>();
 
-builder.Services.AddQuartzScheduler();
+builder.Services.AddScheduledJobs(intervalInMinutes);
 
 var app = builder.Build();
 

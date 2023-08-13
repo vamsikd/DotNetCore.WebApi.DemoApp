@@ -9,5 +9,8 @@ namespace DemoApp.API.Services.Interfaces
         bool Delete(int productId);
         ProductResponseDto Get(int productId);
         IEnumerable<ProductResponseDto> GetAll();
+        int ArchiveInActiveProducts();
+        IEnumerable<ArchivedProductResponseDto> GetArchivedProducts();
+
     }
 }
