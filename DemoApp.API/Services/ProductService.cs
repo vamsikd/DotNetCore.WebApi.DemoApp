@@ -125,7 +125,7 @@ namespace DemoApp.API.Services
                .Include(p => p.ProductDetail)
                .FirstOrDefault(p => p.Id == productId);
 
-            if (product == null)
+            if (product is null)
                 throw new NotFoundException($"Product not found for Id {productId}");
 
             return product;

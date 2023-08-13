@@ -6,12 +6,15 @@ namespace DemoApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categorySvc;
-        public CategoryController(ICategoryService categoryService)
+        private readonly IExcelFileProcessor _excelReader;
+
+        public CategoriesController(ICategoryService categoryService, IExcelFileProcessor excelReader)
         {
-            this._categorySvc = categoryService;
+            _categorySvc = categoryService;
+            _excelReader = excelReader;
         }
 
         [HttpGet]
@@ -22,10 +25,22 @@ namespace DemoApp.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] AddCategoryRequestDto category)
+        public IActionResult Add([FromBody] AddCategoryRequestDto category)
         {
             var categoryId = _categorySvc.Add(category);
             return Ok(categoryId);
+        }
+
+        [HttpPost]
+        [Route("upload")]
+        public IActionResult Add(IFormFile categoryFile)
+        {
+            if (categoryFile is null || categoryFile.Length == 0)
+                return BadRequest("Invalid File");
+                    
+            var categories = _excelReader.GetCategories(categoryFile);
+            var isSuccess = _categorySvc.UpdateOrAddRange(categories);
+            return Ok(isSuccess);
         }
 
         [HttpPut]
