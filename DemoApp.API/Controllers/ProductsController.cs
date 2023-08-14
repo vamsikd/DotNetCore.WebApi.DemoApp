@@ -55,9 +55,9 @@ namespace DemoApp.API.Controllers
 
         [HttpGet]
         [Route("archived")]
-        public ActionResult<IEnumerable<ArchivedProductResponseDto>> GetArchivedProducts()
+        public async Task<ActionResult<IEnumerable<ArchivedProductResponseDto>>> GetArchivedProducts()
         {
-            var archived = _productSvc.GetArchivedProducts();
+            var archived = await _productSvc.GetArchivedProducts();
             return Ok(archived);
         }
 

@@ -96,47 +96,43 @@ namespace DemoApp.API.Services
 
         public IEnumerable<ProductResponseDto> GetAll()
         {
-            var products = _dbContext.Products
+            var productResponseDtoList = _dbContext.Products
                 .Include(p => p.ProductDetail)
-                .ToList();
-            var productResponseDtoList = products
                 .Select(p => new ProductResponseDto
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                        Price = p.Price,
-                        CategoryId = p.CategoryId,
-                        AvailableQuantity = p.ProductDetail.AvailableQuantity,
-                        Discount = p.ProductDetail.Discount,
-                        InStock = p.ProductDetail.InStock,
-                        IsActive = p.ProductDetail.IsActive,
-                        CreatedOn = p.CreatedOn,
-                        UpdatedOn = p.UpdatedOn
-
-                    })
+                 {
+                     Id = p.Id,
+                     Name = p.Name,
+                     Description = p.Description,
+                     Price = p.Price,
+                     CategoryId = p.CategoryId,
+                     AvailableQuantity = p.ProductDetail.AvailableQuantity,
+                     Discount = p.ProductDetail.Discount,
+                     InStock = p.ProductDetail.InStock,
+                     IsActive = p.ProductDetail.IsActive,
+                     CreatedOn = p.CreatedOn,
+                     UpdatedOn = p.UpdatedOn
+                 })
                 .ToList();
             return productResponseDtoList;
         }
 
-        public IEnumerable<ArchivedProductResponseDto> GetArchivedProducts()
+        public async Task<IEnumerable<ArchivedProductResponseDto>> GetArchivedProducts()
         {
-            var archivedProducts = _dbContext.ArchivedProducts
-                .ToList();
-            var archivedProductResponseDtoList = archivedProducts
-                .Select(p => new ArchivedProductResponseDto
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    CategoryId = p.CategoryId,
-                    CreatedOn = p.CreatedOn,
-                    UpdatedOn = p.UpdatedOn
+            var archivedProducts = await _dbContext.ArchivedProducts
+                 .Select(p => new ArchivedProductResponseDto
+                 {
+                     Id = p.Id,
+                     Name = p.Name,
+                     Description = p.Description,
+                     Price = p.Price,
+                     CategoryId = p.CategoryId,
+                     CreatedOn = p.CreatedOn,
+                     UpdatedOn = p.UpdatedOn
 
-                })
-                .ToList();
-            return archivedProductResponseDtoList;
+                 })
+                .ToListAsync();
+           
+            return archivedProducts;
         }
 
         public int ArchiveInActiveProducts()

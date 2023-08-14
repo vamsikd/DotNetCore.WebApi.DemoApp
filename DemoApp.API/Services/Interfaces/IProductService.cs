@@ -10,7 +10,7 @@ namespace DemoApp.API.Services.Interfaces
         ProductResponseDto Get(int productId);
         IEnumerable<ProductResponseDto> GetAll();
         int ArchiveInActiveProducts();
-        IEnumerable<ArchivedProductResponseDto> GetArchivedProducts();
+        Task<IEnumerable<ArchivedProductResponseDto>> GetArchivedProducts();
 
     }
 }

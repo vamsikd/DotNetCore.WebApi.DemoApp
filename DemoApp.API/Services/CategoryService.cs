@@ -108,15 +108,14 @@ namespace DemoApp.API.Services
 
             var categoryResponseDtoList = categories
                 .Select(c => new CategoryResponseDto
-                {
-                    Id = c.Id,
-                    Name = c.Name,
-                    Code = c.Code,
-                    Description = c.Description,
-                    CreatedOn = c.CreatedOn,
-                    UpdatedOn = c.UpdatedOn
-
-                })
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Code = c.Code,
+                        Description = c.Description,
+                        CreatedOn = c.CreatedOn,
+                        UpdatedOn = c.UpdatedOn
+                    })
                 .ToList();
             return categoryResponseDtoList;
         }
