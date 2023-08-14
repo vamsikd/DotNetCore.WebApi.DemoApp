@@ -3,6 +3,7 @@ using DemoApp.API.Dto;
 using DemoApp.API.Exceptions;
 using DemoApp.API.Models;
 using DemoApp.API.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using System.Reflection.Metadata.Ecma335;
 
 namespace DemoApp.API.Services
@@ -36,11 +37,10 @@ namespace DemoApp.API.Services
 
         public bool UpdateOrAddRange(IEnumerable<AddCategoryRequestDto> categories)
         {
-            var categoriesToBeUpdated = this.GetModels(categories.Select(c => c.Name).ToArray());
+            var categoriesToBeUpdated = this.GetCategoriesToBeUpdated(categories.Select(c => c.Name).ToArray());
             foreach (var category in categories)
             {
-                var categoryToBeUpdated = categoriesToBeUpdated.FirstOrDefault(c => string.Equals(c.Name, category.Name));
-                if (categoryToBeUpdated is null)
+                if (!categoriesToBeUpdated.ContainsKey(category.Name))
                 {
                     _dbContext.Add(new Category
                     {
@@ -53,6 +53,7 @@ namespace DemoApp.API.Services
                 }
                 else
                 {
+                    var categoryToBeUpdated = categoriesToBeUpdated[category.Name];
                     categoryToBeUpdated.Name = category.Name;
                     categoryToBeUpdated.Description = category.Description;
                     categoryToBeUpdated.Code = category.Code;
@@ -132,11 +133,11 @@ namespace DemoApp.API.Services
             return category;
         }
 
-        private List<Category> GetModels(string[] names)
+        private Dictionary<string,Category> GetCategoriesToBeUpdated(string[] names)
         {
             return _dbContext.Categories
                .Where(c => names.Contains(c.Name))
-               .ToList();
+               .ToDictionary(c => c.Name);
         }
     }
 }
